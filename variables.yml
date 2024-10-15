@@ -1,0 +1,23 @@
+---
+# Default values
+default_image: CC-Ubuntu22.04
+default_flavor: m1.medium
+default_network: CH-822922-net
+ssh_key_name: Team21_VM-2
+
+os_auth:
+  auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+  username: "{{ lookup('env', 'OS_USERNAME') }}"
+  password: "{{ lookup('env', 'OS_PASSWORD') }}"
+  project_name: "{{ lookup('env', 'OS_PROJECT_NAME') }}"
+
+# List of VMs to create
+vms_to_create:
+  - name: Team21_vm1
+  - name: Team21_vm2
+  - name: Team21_vm3
+  - name: Team21_vm4
+
+# Other variables used in the master playbook
+local_user: aryanreddy
+cloud_user: cc
