@@ -1,0 +1,48 @@
+---
+- name: Ensure firewalld is installed
+  package:
+    name: firewalld
+    state: present
+  become: true
+
+- name: Ensure firewalld is running and enabled
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+  become: true
+
+- name: Open port for Zookeeper
+  firewalld:
+    port: 2181/tcp
+    permanent: yes
+    state: enabled
+  become: true
+
+- name: Open port for Kafka
+  firewalld:
+    port: 9092/tcp
+    permanent: yes
+    state: enabled
+  become: true
+
+- name: Open port for Kafka inter-broker communication
+  firewalld:
+    port: 9093/tcp
+    permanent: yes
+    state: enabled
+  become: true
+
+- name: Reload firewalld
+  command: firewall-cmd --reload
+  become: true
+
+- name: Get firewalld status
+  command: firewall-cmd --list-all
+  register: firewall_status
+  changed_when: false
+  become: true
+
+- name: Display firewall status
+  debug:
+    var: firewall_status.stdout_lines

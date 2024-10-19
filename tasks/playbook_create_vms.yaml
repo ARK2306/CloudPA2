@@ -1,0 +1,19 @@
+---
+- name: Create VMs in Chameleon Cloud
+  openstack.cloud.server:
+    state: present
+    auth: "{{ os_auth }}"
+    name: "{{ item.name }}"
+    image: "{{ item.image | default(default_image) }}"
+    flavor: "{{ item.flavor | default(default_flavor) }}"
+    network: "{{ item.network | default(default_network) }}"
+    key_name: "{{ ssh_key_name }}"
+    auto_ip: false
+    wait: yes
+    timeout: 600
+  loop: "{{ vms_to_create }}"
+  register: created_vms
+
+- name: Print VM details
+  ansible.builtin.debug:
+    var: created_vms

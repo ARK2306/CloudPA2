@@ -1,0 +1,7 @@
+---
+- name: Download Kafka
+  get_url:
+    url: "https://downloads.apache.org/kafka/3.8.0/kafka_2.13-3.8.0.tgz"
+    dest: "/Users/aryanreddy/Desktop/assignment_PA2/"
+    mode: "0644"
+  become: false
