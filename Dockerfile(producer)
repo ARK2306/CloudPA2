@@ -1,0 +1,25 @@
+# Use an official Python runtime as the base image
+FROM python:3.8-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install the required packages
+RUN pip install --no-cache-dir kafka-python numpy pillow tensorflow
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Define environment variables
+ENV KAFKA_BROKER=192.168.5.33:9092
+ENV PUBLISH_TOPIC=team21
+ENV INFERENCE_TOPIC=inference_result
+ENV TOTAL_SAMPLES=1000
+ENV SAMPLE_FREQUENCY=1
+ENV NUM_PRODUCERS=1
+
+# Run the script when the container launches
+CMD ["python3", "Producer1_IoT.py"]

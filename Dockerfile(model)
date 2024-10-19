@@ -1,0 +1,36 @@
+# Use an official TensorFlow runtime as a parent image
+FROM tensorflow/tensorflow:2.7.0-gpu
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Add NVIDIA GPG key
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir flask \
+    pillow \
+    kafka-python \
+    numpy
+
+# Make port 5000 available to the world outside this container
+EXPOSE 5000
+
+# Define environment variable
+ENV KAFKA_BROKER=192.168.5.33:9092
+ENV KAFKA_TOPIC=team21
+ENV INFERENCE_RESULT_TOPIC=inference_result
+
+# Run app.py when the container launches
+CMD ["python3", "model.py"]
